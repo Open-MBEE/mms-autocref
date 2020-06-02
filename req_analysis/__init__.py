@@ -1,3 +1,1 @@
-from req_analysis.model import Model
 from req_analysis.requirement import Requirement
-from req_analysis.context_cluster import ContextCluster
