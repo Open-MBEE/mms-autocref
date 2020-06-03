@@ -6,6 +6,9 @@ from req_analysis.libs.neptune_wrapper import node_distance
 from paris import paris
 from paris.utils import select_clustering
 
+import scipy
+import scipy.spatial.distance as ssd
+
 import time
 
 nlp_np = spacy.load("en_core_web_sm")
@@ -33,6 +36,8 @@ class Requirement():
         '''Takes in a Requirement object and optional configuration
         Returns a list of matches between the tokens in the requirement and the list of model_elements
         Will match on the 'name' attribute of the model_elements dictionnaries'''
+
+        self.transclusion_relations.clear()
 
         # In all req tokens
         for token in self.tokens:
@@ -92,20 +97,21 @@ class Requirement():
 
     def match_clustering(self):
 
-        paris_dendrogram = paris.paris(self.req_subgraph)
+
+        linkage_array = scipy.cluster.hierarchy.linkage(ssd.squareform(nx.to_numpy_matrix(self.req_subgraph)))
         looper = True
         k = 1
         max_k = self.req_subgraph.number_of_nodes()
 
-        print(paris_dendrogram)
-        print(max_k)
+        print(linkage_array)
+
         while looper and k < max_k:
 
-            L = select_clustering(paris_dendrogram, k)
-            print(L, select_clustering(paris_dendrogram, k+1))
-            looper = self.check_continue(select_clustering(paris_dendrogram, k+1))
+            L = select_clustering(linkage_array, k)
+            looper = self.check_continue(select_clustering(linkage_array, k+1))
             k += 1
 
+        print(L)
         return L
 
 
