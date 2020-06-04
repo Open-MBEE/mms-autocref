@@ -112,7 +112,7 @@ class Requirement():
         for el_i in cluster:
             token_i_id = self.req_subgraph.nodes(data=True)[el_i]['token']['token_id']
             if token_i_id not in winners:
-                winners[token_i_id]=self.req_subgraph.nodes(data=True)[el_i]['model_element']['uri']
+                winners[token_i_id]=self.req_subgraph.nodes(data=True)[el_i]
         
         return winners
 
