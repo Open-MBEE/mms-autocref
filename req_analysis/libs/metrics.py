@@ -6,7 +6,8 @@ import numpy as np
 import string
 
 import spacy
-nlp = spacy.load("en_core_web_sm")
+import en_core_web_sm
+nlp_np = en_core_web_sm.load()
 spacy_stopwords = spacy.lang.en.stop_words.STOP_WORDS
 
 

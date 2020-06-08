@@ -11,7 +11,8 @@ import scipy.cluster.hierarchy as hrchy
 
 import time
 
-nlp_np = spacy.load("en_core_web_sm")
+import en_core_web_sm
+nlp_np = en_core_web_sm.load()
 merge_nps = nlp_np.create_pipe("merge_noun_chunks")
 nlp_np.add_pipe(merge_nps)
 
