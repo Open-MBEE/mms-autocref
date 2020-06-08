@@ -1,11 +1,9 @@
 import spacy
 import networkx as nx
 import numpy as np
+
 from req_analysis.libs.metrics import fuzzy_match_score
 from req_analysis.libs.neptune_wrapper import node_distance
-
-from paris import paris
-from paris.utils import select_clustering, select_clustering_gen
 
 import scipy
 import scipy.spatial.distance as ssd
@@ -115,58 +113,6 @@ class Requirement():
                 winners[token_i_id]=self.req_subgraph.nodes(data=True)[el_i]
         
         return winners
-
-
-
-##### LEGACY 
-
-    def match_clustering_stop_condition(self):
-        '''Uses the NetworkX req_subgraph to cluster the couple together, until the condition "No one token should be in a 
-        single cluster more than once" is not verified'''
-
-        linkage_array = scipy.cluster.hierarchy.linkage(ssd.squareform(nx.to_numpy_matrix(self.req_subgraph)))
-        looper = True
-        k = 1
-        max_k = self.req_subgraph.number_of_nodes()
-
-        print(linkage_array)
-
-        while looper and k < max_k:
-
-            cluster_list = select_clustering(linkage_array, k)
-            looper = self.check_continue(select_clustering(linkage_array, k+1))
-            k += 1
-
-        print(cluster_list)
-        
-        winners = dict()
-        for cluster in cluster_list:
-            for el_i in cluster:
-                token_i_id = self.req_subgraph.nodes(data=True)[el_i]['token']['token_id']
-                if token_i_id not in winners:
-                    winners[token_i_id]=self.req_subgraph.nodes(data=True)[el_i]['model_element']['uri']
-                    
-        return winners
-
-
-
-    def check_continue(self, L):
-        '''Takes in a list returned by select_clustering and checks that no cluster has 2 times the same token in it'''
-        
-        # For each cluster
-        for cluster in L:
-
-            # checks that no 2 nodes in the cluster has the same source token
-            for i in range(len(cluster)):
-                token_i = self.req_subgraph.nodes(data=True)[cluster[i]]['token']
-                for j in range(i+1, len(cluster)):
-
-                    token_j = self.req_subgraph.nodes(data=True)[cluster[j]]['token']
-
-                    if token_i['token_id']==token_j['token_id']:
-                        return False
-
-        return True
 
 
 
