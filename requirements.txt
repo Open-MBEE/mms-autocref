@@ -1,4 +1,0 @@
-gremlinpython
-tornado==4.5.3
-sparqlwrapper
-spacy
