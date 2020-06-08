@@ -7,6 +7,7 @@ from req_analysis.libs.neptune_wrapper import node_distance
 
 import scipy
 import scipy.spatial.distance as ssd
+import scipy.cluster.hierarchy as hrchy
 
 import time
 
@@ -118,7 +119,7 @@ class Requirement():
 
 # Clusters all the way and returns an ordonated list
 def order_clustering(G, k):
-    D = scipy.cluster.hierarchy.linkage(ssd.squareform(nx.to_numpy_matrix(G)))
+    D = hrchy.linkage(ssd.squareform(nx.to_numpy_matrix(G)))
     n = np.shape(D)[0] + 1
     k = min(k,n - 1)
     cluster = {i:[0, i] for i in range(n)}
