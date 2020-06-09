@@ -91,7 +91,6 @@ class Requirement():
                         dist_ij = 11
                     print('_________')
 
-                # We use 1/dist_ij because the Paris algorithm uses higher_weight=greater_proximity convention
                 req_subgraph.add_edge(i, j, weight=dist_ij)
 
         self.req_subgraph = req_subgraph
