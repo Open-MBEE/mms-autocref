@@ -7,7 +7,7 @@ import string
 
 import spacy
 import en_core_web_sm
-nlp_np = en_core_web_sm.load()
+nlp = en_core_web_sm.load()
 spacy_stopwords = spacy.lang.en.stop_words.STOP_WORDS
 
 
