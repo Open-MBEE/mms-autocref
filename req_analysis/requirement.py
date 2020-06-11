@@ -3,7 +3,7 @@ import networkx as nx
 import numpy as np
 
 from req_analysis.libs.metrics import fuzzy_match_score
-from req_analysis.libs.neptune_wrapper import node_distance
+from req_analysis.libs.neptune_wrapper import node_distance, get_node_neighbors
 
 import scipy
 import scipy.spatial.distance as ssd
@@ -30,7 +30,8 @@ class Requirement():
         for token in nlp_np(self.text):
             self.tokens.append(dict(text=token.text, pos=token.pos_, token_id=token.i))
 
-        self.req_subgraph = None
+        self.req_subgraph = None   # Initialized by self.init_match_subgraph()
+        self.winners = None        # Initialized by self.match_clustering()
 
 
     def match_req_tokens(self, model_elements, match_threshold, pos_list=["NOUN", "PROPN"]):
@@ -39,7 +40,7 @@ class Requirement():
         Will match on the 'name' attribute of the model_elements dictionnaries'''
 
         self.transclusion_relations.clear()
-        c=0
+        count=0
         # In all req tokens
         for token in self.tokens:
             # Only POS of interest
@@ -48,7 +49,7 @@ class Requirement():
                 found_match = None
 
                 for element in model_elements:
-                    c+=1
+                    count+=1
                     fuzzy_score = fuzzy_match_score(token['text'],  element['name'])
 
                     if fuzzy_score < match_threshold:
@@ -56,7 +57,7 @@ class Requirement():
                         found_match = dict(token=token, model_element=element, score=fuzzy_score)
                         self.transclusion_relations.append(found_match)
 
-        return self.transclusion_relations, c
+        return self.transclusion_relations, count
 
 
     def init_match_subgraph(self, g):
@@ -112,8 +113,30 @@ class Requirement():
             token_i_id = self.req_subgraph.nodes(data=True)[el_i]['token']['token_id']
             if token_i_id not in winners:
                 winners[token_i_id]=self.req_subgraph.nodes(data=True)[el_i]
-        
+
+        self.winners = winners
         return winners
+
+
+    def allocation_discovery(self):
+
+        allocation_candidate = self.winners.copy()
+
+        for candidate in self.winners.values():
+
+            candidate_neighbors = get_node_neighbors(candidate) #This has to exclude itself
+            score = 1
+
+            for neighbor in candidate_neighbors:
+
+                if neighbor in allocation_candidate:
+                    # Maybe we want more tuning there, to chose if we pop the neighbor or the candidate
+                    # TODO: Score based on how many neighbors you have, etc.. 
+
+                    allocation_candidate.pop(neighbor)
+
+
+        return allocation_candidate
 
 
 
