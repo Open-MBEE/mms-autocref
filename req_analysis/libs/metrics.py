@@ -15,8 +15,8 @@ def fuzzy_match_score(req_token_text, model_element_name):
     '''Takes in 2 strings and return a fuzzy matching score'''
 
     fuzzy = 1 - (fuzz.ratio(req_token_text, model_element_name) / 100. )
-    jaccard = jaccard_distance(set(req_token_text.lower()), set(model_element_name.lower()))
-    cosine = cosine_distance(vector_encode_letters(req_token_text), vector_encode_letters(model_element_name))
+    # jaccard = jaccard_distance(set(req_token_text.lower()), set(model_element_name.lower()))
+    cosine = cosine_distance(vector_encode_letters(req_token_text), vector_encode_letters(model_element_name)) # This is 10 times slower than the other
 
     return fuzzy*cosine
 
