@@ -118,13 +118,13 @@ class Requirement():
         return winners
 
 
-    def allocation_discovery(self):
+    def allocation_discovery(self, g):
 
         allocation_candidate = self.winners.copy()
 
         for candidate in self.winners.values():
 
-            candidate_neighbors = get_node_neighbors(candidate) #This has to exclude itself
+            candidate_neighbors = get_node_neighbors(g, candidate['model_element']['uri']) #This has to exclude itself
             score = 1
 
             for neighbor in candidate_neighbors:
