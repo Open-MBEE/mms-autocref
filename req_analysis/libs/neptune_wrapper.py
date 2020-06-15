@@ -50,8 +50,12 @@ def get_type_from_part_properties(neptune_instance, node):
     return neptune_instance.V(node).out('ownedAttributeFromClass').hasLabel('Property').out('typeFromTypedElement').hasLabel('Class').toList()
 
 
-def get_owner(neptune_instance, el_1, el_2):
+def get_owner(neptune_instance, el_1):
     '''Returns the lowest common ancestor in the containment tree of the model
     see: http://tinkerpop.apache.org/docs/current/recipes/#_lowest_common_ancestor'''
 
     return neptune_instance.V(el_1).out('ownerElement').limit(1).toList()
+
+
+def get_named_classes(neptune_instance):
+    return neptune_instance.V().hasLabel('Class').has('_label').toList()
