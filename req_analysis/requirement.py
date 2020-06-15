@@ -1,8 +1,8 @@
 import spacy
 from py2neo import Node, Relationship
 
-from req_analysis.lib.neo4j_wrapper import get_weighted_neighbors
-from req_analysis.lib.metrics import fuzzy_match_score
+from req_analysis.libs.neo4j_wrapper import get_weighted_neighbors
+from req_analysis.libs.metrics import fuzzy_match_score
 
 nlp_np = spacy.load("en_core_web_sm")
 merge_nps = nlp_np.create_pipe("merge_noun_chunks")

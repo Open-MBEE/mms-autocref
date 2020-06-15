@@ -1,4 +1,4 @@
-from req_analysis.lib.neo4j_wrapper import get_node_context
+from req_analysis.libs.neo4j_wrapper import get_node_context
 
 class ContextCluster():
 
