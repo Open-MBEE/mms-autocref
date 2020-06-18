@@ -21,7 +21,7 @@ def node_distance(neptune_instance, el_1, el_2):
     '''Returns the number of hops in the shortest path between 2 elements'''
     try:
         with time_limit(3):
-            path = neptune_instance.V(el_1).repeat(both().not_(hasId('master')).simplePath()).until(hasId(el_2).or_().loops().is_(8)).path().limit(1).toList()[0]
+            path = neptune_instance.V(el_1).repeat(both().not_(hasId(el_1)).simplePath()).until(hasId(el_2).or_().loops().is_(8)).path().limit(1).toList()[0]
             if (path[0].id == el_1) and (path[-1].id == el_2):
                 return len(path)-1
             else:
