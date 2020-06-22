@@ -21,5 +21,5 @@ class ReferenceTarget():
         for result in results["results"]["bindings"]:
             self.table.append(dict(uri=result['element']['value'], name=result['label']['value']))
 
-        print('Status Code:', response_.response.code)
+        print('== Status Code:', response_.response.code, '==')
         print(len(self.table), 'reference targets found.')
