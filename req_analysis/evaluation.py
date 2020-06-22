@@ -45,6 +45,7 @@ class Evaluation():
         return self.allocations
 
     def display_match_subgraph(self):
+        '''Displays the NetworkX subgraph of the found matches'''
         pos = nx.circular_layout(self.matches_subgraph)
         nx.draw_networkx_edge_labels(self.matches_subgraph, pos)
         nx.draw_circular(self.matches_subgraph, with_labels=True)
@@ -135,7 +136,7 @@ class Evaluation():
 
 
     def allocation_discovery(self, g):
-
+        '''Discover allocations based on distance between the winners'''
 
         allocation_candidate = [candidate['model_element']['uri'] for candidate in self.winners.values()]
 
@@ -156,6 +157,7 @@ class Evaluation():
 
 
     def insert_references(self, insert_blocks, insert_query):
+        '''Inserts back the found references (winner) into the SPARQL graph'''
         insert_concat = """"""
 
         for winner in self.winners.values():
@@ -178,6 +180,8 @@ class Evaluation():
 
 # Clusters all the way and returns an ordonated list
 def order_clustering(G, k):
+    '''Utility function used to execute a hierarchical clustering
+    The first element of the list of each cluster is its age'''
     D = hrchy.linkage(ssd.squareform(nx.to_numpy_matrix(G)))
     n = np.shape(D)[0] + 1
     k = min(k,n - 1)
