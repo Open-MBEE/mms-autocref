@@ -103,7 +103,7 @@ class Evaluation():
                     if pprint: print(el_i, el_j)
                     time1 = time.time()
                     try:
-                        dist_ij = node_distance(g, el_i['uri'].replace('https://opencae.jpl.nasa.gov/mms/rdf/element/', ''), el_j['uri'].replace('https://opencae.jpl.nasa.gov/mms/rdf/element/', ''))
+                        dist_ij = node_distance(g, el_i['uri'].replace('https://opencae.jpl.nasa.gov/mms/rdf/element/', ''), el_j['uri'].replace('https://opencae.jpl.nasa.gov/mms/rdf/element/', ''), pprint)
                         if pprint: print('DISTANCE: in', time.time()-time1, 's ', dist_ij)
                     except:
                         dist_ij = 11
