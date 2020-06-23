@@ -101,6 +101,8 @@ class RequirementEvaluator():
                                                 pprint=False)
                 req_evaluation.insert_references(insert_blocks, insert_query)
                 print(c, '/', max_evals, '--- EVALUATION done for req: ', req_id)
+            except ValueError:
+                print(c, '/', max_evals, '--- NO MATCH FOUND evaluation with req: ', req_id)
             except:
                 print(c, '/', max_evals, '--- FAILED evaluation with req: ', req_id)
 
