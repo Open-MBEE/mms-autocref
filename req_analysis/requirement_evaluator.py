@@ -87,7 +87,7 @@ class RequirementEvaluator():
 
         return req_evaluation
 
-    def evaluate_all_requirements(self, neptune_graph, reference_targets, insert_blocks, insert_query):
+    def evaluate_all_requirements(self, neptune_graph, reference_targets, insert_blocks, insert_query, pprint=False):
         '''Runs an Evalution flow for all requirements in the requirement_evaluator
         THIS WILL TAKE A (VERY) LONG TIME'''
 
@@ -99,7 +99,7 @@ class RequirementEvaluator():
                 req_evaluation = self.evaluate_req_by_id(neptune_graph, 
                                                 req_id, 
                                                 reference_targets,
-                                                pprint=False)
+                                                pprint=pprint)
                 req_evaluation.insert_references(insert_blocks, insert_query)
                 print(c, '/', max_evals, '---', time.time()-time2, 's\nEVALUATION done for req: ', req_id)
             except ValueError:
@@ -133,21 +133,33 @@ select * from mms-graph:data.tmt {
     ?class a uml-class:Class ;
         mms-property:appliedStereotypeInstance ?instance ;
         .
-
+​
     # `InstanceSpecification`. Stereotype classifier and all slots
-    ?instance mms-property:slot ?slot ;
+    ?instance mms-property:classifierFromInstanceSpecification ?stereotype ;
+        mms-property:slot ?slot ;
         .
-
-    # Slot --> value
+​
+    # stereotype
+    ?stereotype a uml-class:Stereotype ;
+        .
+​
+    # Slot --> value, and defining feature
     ?slot mms-property:valueValueSpecificationFromSlot ?slotValue ;
+        mms-property:definingFeatureStructuralFeature ?feature ;
         .
-
+​
+    # defining feature's name
+    ?feature mms-property:nameString ?featureName ;
+        .
+​
     # value --> string
     ?slotValue a uml-class:LiteralString ;
         mms-property:valueString ?valueString ;
         .
-
-    # filter string by those starting with html
-    filter(regex(?valueString, \"^\\\\s*<\"))
+​
+    # defining feature(s) name(s)
+    values ?featureName {
+        "Text"
+    }
 }
 """
