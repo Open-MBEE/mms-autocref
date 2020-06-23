@@ -133,30 +133,30 @@ select * from mms-graph:data.tmt {
     ?class a uml-class:Class ;
         mms-property:appliedStereotypeInstance ?instance ;
         .
-​
-    # `InstanceSpecification`. Stereotype classifier and all slots
+
+    # `InstanceSpecification` Stereotype classifier and all slots
     ?instance mms-property:classifierFromInstanceSpecification ?stereotype ;
         mms-property:slot ?slot ;
         .
-​
+
     # stereotype
     ?stereotype a uml-class:Stereotype ;
         .
-​
+
     # Slot --> value, and defining feature
     ?slot mms-property:valueValueSpecificationFromSlot ?slotValue ;
         mms-property:definingFeatureStructuralFeature ?feature ;
         .
-​
+
     # defining feature's name
     ?feature mms-property:nameString ?featureName ;
         .
-​
+
     # value --> string
     ?slotValue a uml-class:LiteralString ;
         mms-property:valueString ?valueString ;
         .
-​
+
     # defining feature(s) name(s)
     values ?featureName {
         "Text"
