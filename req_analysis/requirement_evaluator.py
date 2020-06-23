@@ -40,11 +40,13 @@ class RequirementEvaluator():
         return self.requirements[element_id]
 
 
-    def evaluate_req_by_id(self, neptune_graph, element_id, reference_targets, pprint=False):
+    def evaluate_req_by_id(self, neptune_graph, requirement_id, reference_targets, pprint=False):
+        '''Runs an Evaluation flow on a requirement, matched against reference_targets
+        pprint=True will output the analysis real time'''
 
         time1 = time.time()
 
-        requirement_dict = self.get_requirement_by_id(element_id)
+        requirement_dict = self.get_requirement_by_id(requirement_id)
         model_elements = reference_targets.table
 
         req_evaluation = Evaluation(requirement_dict["instance"]["value"], requirement_dict["valueString"]["value"], self.sparql_wrapper)
@@ -84,5 +86,22 @@ class RequirementEvaluator():
                 print('URI: ', alloc['model_element']['uri'], '\n_________')
 
         return req_evaluation
+
+    def evaluate_all_requirements(self, neptune_graph, reference_targets, insert_blocks, insert_query):
+        '''Runs an Evalution flow for all requirements in the requirement_evaluator
+        THIS WILL TAKE A (VERY) LONG TIME'''
+
+        c, max_evals = 0, len(self.requirements.keys())
+        for req_id in self.requirements.keys():
+            c += 1
+            try:
+                req_evaluation = self.evaluate_req_by_id(neptune_graph, 
+                                                req_id, 
+                                                reference_targets,
+                                                pprint=False)
+                req_evaluation.insert_references(insert_blocks, insert_query)
+                print(c, '/', max_evals, '--- EVALUATION done for req: ', req_id)
+            except:
+                print(c, '/', max_evals, '--- FAILED evaluation with req: ', req_id)
 
 
