@@ -17,7 +17,7 @@ def time_limit(seconds):
 
 
 
-def node_distance(neptune_instance, el_1, el_2):
+def node_distance(neptune_instance, el_1, el_2, pprint=True):
     '''Returns the number of hops in the shortest path between 2 elements'''
     try:
         with time_limit(3):
@@ -27,7 +27,7 @@ def node_distance(neptune_instance, el_1, el_2):
             else:
                 return 10
     except TimeoutException as e:
-        print("Timeout: node_distance()")
+        if pprint: print("Timeout: node_distance()")
         return 10
 
 
