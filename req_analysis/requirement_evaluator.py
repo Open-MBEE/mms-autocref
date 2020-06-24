@@ -30,7 +30,7 @@ class RequirementEvaluator():
         results = self.sparql_wrapper.query()
 
         for result in results.convert()["results"]["bindings"]:
-            self.requirements[result['slotValue']['value'].replace('https://opencae.jpl.nasa.gov/mms/rdf/element/', '')] = result
+            self.requirements[result['instance']['value'].replace('https://opencae.jpl.nasa.gov/mms/rdf/element/', '')] = result
 
         print('== Status Code:', results.response.code, '==')
         print(len(self.requirements), 'requirements found.')
