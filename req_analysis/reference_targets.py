@@ -20,7 +20,9 @@ class ReferenceTarget():
         results = response_.convert()
 
         for result in results["results"]["bindings"]:
-            self.table.append(dict(uri=result['element']['value'], name=result['label']['value']))
+            self.table.append(dict(uri=result['element']['value'],
+                                   name=result['label']['value'],
+                                   mms_id=result['element']['value'].replace('https://opencae.jpl.nasa.gov/mms/rdf/element/', '')))
 
         print('== Status Code:', response_.response.code, '==')
         print(len(self.table), 'reference targets found.')
