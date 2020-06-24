@@ -3,6 +3,7 @@ import networkx as nx
 import numpy as np
 import uuid
 
+from req_analysis.sparql import INSERT_BLOCKS, INSERT_QUERY
 from req_analysis.libs.metrics import fuzzy_match_score
 from req_analysis.libs.neptune_wrapper import node_distance, get_node_neighbors
 
@@ -156,19 +157,19 @@ class Evaluation():
         return allocation_candidate
 
 
-    def insert_references(self, insert_blocks, insert_query):
+    def insert_references(self):
         '''Inserts back the found references (winner) into the SPARQL graph'''
         insert_concat = """"""
 
         for winner in self.winners.values():
-            insert_concat += insert_blocks.format(input_uri = self.uri,
+            insert_concat += INSERT_BLOCKS.format(input_uri = self.uri,
                                         input_text = self.text.replace('"', r'\"'),
                                         reference_uuid = uuid.uuid4().hex,
                                         match_uri = winner['model_element']['uri'],
                                         token_position = winner['token']['token_id'],
                                         token_text = winner['token']['text'].replace('"', r'\"'))
 
-        insert_str = insert_query.format(insert_blocks=insert_concat)
+        insert_str = INSERT_QUERY.format(insert_blocks=insert_concat)
 
         self.sparql_wrapper.setMethod("POST")
         self.sparql_wrapper.setQuery(insert_str)

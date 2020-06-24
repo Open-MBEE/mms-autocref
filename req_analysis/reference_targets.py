@@ -1,4 +1,5 @@
 from SPARQLWrapper import JSON, POST
+from req_analysis.sparql import QUERY_ELEMENTS
 
 class ReferenceTarget():
 
@@ -8,11 +9,11 @@ class ReferenceTarget():
 
 
     
-    def init_table(self, query_str):
-        '''Accepts a query_str and queries for all model elements
+    def init_table(self):
+        '''Queries for all model elements
         Initializes table attribute as a list of dict (Keys = {uri, name})
         Returns response info'''
-        self.sparql_wrapper.setQuery(query_str)
+        self.sparql_wrapper.setQuery(QUERY_ELEMENTS)
         self.sparql_wrapper.setReturnFormat(JSON)
 
         response_ = self.sparql_wrapper.query()
