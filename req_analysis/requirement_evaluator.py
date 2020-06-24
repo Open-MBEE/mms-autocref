@@ -82,10 +82,8 @@ class RequirementEvaluator():
 
         if pprint:
             print('_______________________\nALLOCATIONS:')
-            for alloc in allocations.values():
-                print('Token: ', alloc['token']['text'])
-                print('Element: ', alloc['model_element']['name'])
-                print('URI: ', alloc['model_element']['uri'], '\n_________')
+            for alloc in allocations:
+                print('-', alloc)
 
         return req_evaluation
 

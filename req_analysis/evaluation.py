@@ -26,16 +26,18 @@ class Evaluation():
     def __init__(self, uri, text, sparql_wrapper):
         self.sparql_wrapper = sparql_wrapper
         self.uri = uri
+        self.mms_id = uri.replace('https://opencae.jpl.nasa.gov/mms/rdf/element/', '')
         self.text = text
         self.tokens = []
         self.transclusion_relations = []
 
         for token in nlp_np(self.text):
-            self.tokens.append(dict(text=token.text, pos=token.pos_, token_id=token.i))
+            self.tokens.append(dict(text=token.text, pos=token.pos_, token_id=token.i, whitespace=token.whitespace_))
 
         self.matches_subgraph = None   # Initialized by self.init_match_subgraph()
         self.winners = None        # Initialized by self.match_clustering()
         self.allocations = None     # Initialized by self.allocation_discovery()
+        self.cref_text = None
 
 
 
@@ -104,7 +106,7 @@ class Evaluation():
                     if pprint: print(el_i, el_j)
                     time1 = time.time()
                     try:
-                        dist_ij = node_distance(g, el_i['uri'].replace('https://opencae.jpl.nasa.gov/mms/rdf/element/', ''), el_j['uri'].replace('https://opencae.jpl.nasa.gov/mms/rdf/element/', ''), pprint)
+                        dist_ij = node_distance(g, el_i['mms_id'], el_j['mms_id'], pprint)
                         if pprint: print('DISTANCE: in', time.time()-time1, 's ', dist_ij)
                     except:
                         dist_ij = 11
@@ -125,7 +127,10 @@ class Evaluation():
         max_k = self.matches_subgraph.number_of_nodes()
         winners=dict()
 
-        cluster = order_clustering(self.matches_subgraph, max_k)
+        try:
+            cluster = order_clustering(self.matches_subgraph, max_k)
+        except:
+            cluster = []
 
         for el_i in cluster:
             token_i_id = self.matches_subgraph.nodes(data=True)[el_i]['token']['token_id']
@@ -139,15 +144,16 @@ class Evaluation():
     def allocation_discovery(self, g):
         '''Discover allocations based on distance between the winners'''
 
-        allocation_candidate = [candidate['model_element']['uri'] for candidate in self.winners.values()]
+        allocation_candidate = [candidate['model_element'] for candidate in self.winners.values()]
+        allocation_ids = [candidate['mms_id'] for candidate in allocation_candidate]
 
         for candidate in allocation_candidate:
 
-            candidate_neighbors = get_node_neighbors(g, candidate.replace('https://opencae.jpl.nasa.gov/mms/rdf/element/', ''))
+            candidate_neighbors = get_node_neighbors(g, candidate['mms_id'])
 
             for neighbor in candidate_neighbors:
 
-                if neighbor.id in allocation_candidate:
+                if neighbor.id in allocation_ids: 
                     # Maybe we want more tuning there, to chose if we pop the neighbor or the candidate
                     # TODO: Score based on how many neighbors you have, etc.. 
 
@@ -177,6 +183,24 @@ class Evaluation():
 
         results = self.sparql_wrapper.query()
         return results.response.read()
+
+
+    def init_cref_tags_text(self):
+        '''Inserts the <cref id=...> tags in the text, in the Evaluation.cref_text attribute'''
+        
+        cref_text = ''
+        
+        for token in self.tokens:
+            
+            if token['token_id'] in self.get_matches():
+                match_id = self.get_matches()[token['token_id']]['model_element']['mms_id']
+                cref_text = cref_text + '<cref id="' + match_id + '">' + token['text'] + '</cref>' + token['whitespace']
+
+            else:
+                cref_text = cref_text + token['text'] + token['whitespace']
+
+        self.cref_text = cref_text
+        return cref_text
 
 
 # Clusters all the way and returns an ordonated list
