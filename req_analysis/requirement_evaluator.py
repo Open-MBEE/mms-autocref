@@ -42,6 +42,17 @@ class RequirementEvaluator():
         return self.requirements[element_id]
 
 
+    def get_evaluation_by_id(self, requirement_id, reference_targets):
+        '''Returns the Evaluation object for requiremenet_id
+        The only purpose of this function is for an in-depth demo/walkthrough'''
+        requirement_dict = self.get_requirement_by_id(requirement_id)
+        model_elements = reference_targets.table
+
+        req_evaluation = Evaluation(requirement_dict["instance"]["value"], requirement_dict["valueString"]["value"], self.sparql_wrapper)
+
+        return req_evaluation
+
+
     def evaluate_req_by_id(self, neptune_graph, requirement_id, reference_targets, pprint=False):
         '''Runs an Evaluation flow on a requirement, matched against reference_targets
         pprint=True will output the analysis real time'''
