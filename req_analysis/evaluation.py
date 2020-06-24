@@ -23,8 +23,9 @@ nlp_np.add_pipe(merge_nps)
 class Evaluation():
 
 
-    def __init__(self, uri, text, sparql_wrapper):
+    def __init__(self, uri, text, reference_targets, sparql_wrapper):
         self.sparql_wrapper = sparql_wrapper
+        self.model_elements = reference_targets.table
         self.uri = uri
         self.mms_id = uri.replace('https://opencae.jpl.nasa.gov/mms/rdf/element/', '')
         self.text = text
@@ -55,7 +56,7 @@ class Evaluation():
 
 
 
-    def match_tokens(self, model_elements, match_threshold, pos_list=["NOUN", "PROPN"]):
+    def match_tokens(self, match_threshold, pos_list=["NOUN", "PROPN"]):
         '''Returns a list of matches between the tokens in the text and the list of model_elements
         Will match on the 'name' attribute of the model_elements dictionnaries'''
 
@@ -68,7 +69,7 @@ class Evaluation():
 
                 found_match = None
 
-                for element in model_elements:
+                for element in self.model_elements:
                     count+=1
                     fuzzy_score = fuzzy_match_score(token['text'],  element['name'])
 

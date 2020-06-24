@@ -46,9 +46,8 @@ class RequirementEvaluator():
         '''Returns the Evaluation object for requiremenet_id
         The only purpose of this function is for an in-depth demo/walkthrough'''
         requirement_dict = self.get_requirement_by_id(requirement_id)
-        model_elements = reference_targets.table
 
-        req_evaluation = Evaluation(requirement_dict["instance"]["value"], requirement_dict["valueString"]["value"], self.sparql_wrapper)
+        req_evaluation = Evaluation(requirement_dict["instance"]["value"], requirement_dict["valueString"]["value"], reference_targets, self.sparql_wrapper)
 
         return req_evaluation
 
@@ -62,8 +61,8 @@ class RequirementEvaluator():
         requirement_dict = self.get_requirement_by_id(requirement_id)
         model_elements = reference_targets.table
 
-        req_evaluation = Evaluation(requirement_dict["instance"]["value"], requirement_dict["valueString"]["value"], self.sparql_wrapper)
-        matches, count = req_evaluation.match_tokens(model_elements, 0.0035)
+        req_evaluation = Evaluation(requirement_dict["instance"]["value"], requirement_dict["valueString"]["value"], reference_targets, self.sparql_wrapper)
+        matches, count = req_evaluation.match_tokens(0.0035)
 
         if pprint:
             print('Req ID: ', requirement_dict["instance"]["value"], '\nReq text:' , requirement_dict["valueString"]["value"], '\n__________')
