@@ -22,7 +22,7 @@ dependencies:
   - spacy=2.2.4
   - sparqlwrapper=1.8.5
   - pip:
-    - https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.2.0/en_core_web_sm-2.2.0.tar.gz
+    - https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.2.5/en_core_web_sm-2.2.5.tar.gz
     - gremlinpython==3.4.7
     - tornado==4.5.3
 
