@@ -56,44 +56,12 @@ class RequirementEvaluator():
         '''Runs an Evaluation flow on a requirement, matched against reference_targets
         pprint=True will output the analysis real time'''
 
-        time1 = time.time()
-
         requirement_dict = self.get_requirement_by_id(requirement_id)
         model_elements = reference_targets.table
 
         req_evaluation = Evaluation(requirement_dict["instance"]["value"], requirement_dict["valueString"]["value"], reference_targets, self.sparql_wrapper)
-        matches, count = req_evaluation.match_tokens(0.0035)
-
-        if pprint:
-            print('Req ID: ', requirement_dict["instance"]["value"], '\nReq text:' , requirement_dict["valueString"]["value"], '\n__________')
-            print(matches, '\n___________')
-            print(count, 'comparaisons')
-            print('Time: ', time.time()-time1)
-
-        req_evaluation.init_match_subgraph(neptune_graph, pprint)  
-
-        if pprint:
-            pos = nx.circular_layout(req_evaluation.matches_subgraph)
-            nx.draw_networkx_edge_labels(req_evaluation.matches_subgraph, pos)
-            nx.draw_circular(req_evaluation.matches_subgraph, with_labels=True)
         
-
-        definitive_matches = req_evaluation.match_clustering()
-
-        if pprint:
-            print('_______________________\nMATCHES:')
-            for match in definitive_matches.values():
-                print('Token: ', match['token']['text'])
-                print('Element: ', match['model_element']['name'])
-                print('URI: ', match['model_element']['uri'], '\n_________')
-
-
-        allocations = req_evaluation.allocation_discovery(neptune_graph)
-
-        if pprint:
-            print('_______________________\nALLOCATIONS:')
-            for alloc in allocations:
-                print('-', alloc)
+        req_evaluation.evaluate(neptune_graph, pprint)
 
         return req_evaluation
 

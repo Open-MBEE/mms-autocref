@@ -55,6 +55,43 @@ class Evaluation():
         nx.draw_circular(self.matches_subgraph, with_labels=True)
 
 
+    def evaluate(self, neptune_graph, pprint=False):
+        '''Runs a whole evaluation, from match_tokens() to allocation_discovery()'''
+        
+        time1 = time.time()
+        matches, count = self.match_tokens(0.0035)
+
+        if pprint:
+            print(matches, '\n___________')
+            print(count, 'comparaisons')
+            print('Time: ', time.time()-time1)
+
+        self.init_match_subgraph(neptune_graph, pprint)  
+
+        if pprint:
+            pos = nx.circular_layout(self.matches_subgraph)
+            nx.draw_networkx_edge_labels(self.matches_subgraph, pos)
+            nx.draw_circular(self.matches_subgraph, with_labels=True)
+        
+
+        definitive_matches = self.match_clustering()
+
+        if pprint:
+            print('_______________________\nMATCHES:')
+            for match in definitive_matches.values():
+                print('Token: ', match['token']['text'])
+                print('Element: ', match['model_element']['name'])
+                print('URI: ', match['model_element']['uri'], '\n_________')
+
+
+        allocations = self.allocation_discovery(neptune_graph)
+
+        if pprint:
+            print('_______________________\nALLOCATIONS:')
+            for alloc in allocations:
+                print('-', alloc)
+
+
 
     def match_tokens(self, match_threshold, pos_list=["NOUN", "PROPN"]):
         '''Returns a list of matches between the tokens in the text and the list of model_elements
