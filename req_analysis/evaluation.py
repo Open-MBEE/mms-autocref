@@ -104,7 +104,7 @@ class Evaluation():
 
                 else:
                     if pprint: print(i, j)
-                    if pprint: print(el_i, el_j)
+                    # if pprint: print(el_i, el_j)
                     time1 = time.time()
                     try:
                         dist_ij = node_distance(g, el_i['mms_id'], el_j['mms_id'], pprint)
@@ -164,6 +164,24 @@ class Evaluation():
         return allocation_candidate
 
 
+    def init_cref_tags_text(self):
+        '''Inserts the <cref id=...> tags in the text, in the Evaluation.cref_text attribute'''
+        
+        cref_text = ''
+        
+        for token in self.tokens:
+            
+            if token['token_id'] in self.get_matches():
+                match_id = self.get_matches()[token['token_id']]['model_element']['mms_id']
+                cref_text = cref_text + '<cref id="' + match_id + '">' + token['text'] + '</cref>' + token['whitespace']
+
+            else:
+                cref_text = cref_text + token['text'] + token['whitespace']
+
+        self.cref_text = cref_text
+        return cref_text
+
+
     def insert_references(self):
         '''Inserts back the found references (winner) into the SPARQL graph'''
         insert_concat = """"""
@@ -186,22 +204,10 @@ class Evaluation():
         return results.response.read()
 
 
-    def init_cref_tags_text(self):
-        '''Inserts the <cref id=...> tags in the text, in the Evaluation.cref_text attribute'''
-        
-        cref_text = ''
-        
-        for token in self.tokens:
-            
-            if token['token_id'] in self.get_matches():
-                match_id = self.get_matches()[token['token_id']]['model_element']['mms_id']
-                cref_text = cref_text + '<cref id="' + match_id + '">' + token['text'] + '</cref>' + token['whitespace']
-
-            else:
-                cref_text = cref_text + token['text'] + token['whitespace']
-
-        self.cref_text = cref_text
-        return cref_text
+    def insert_allocations(self):
+        '''Inserts the allocations into the SPARQL graph'''
+        #TODO
+        pass
 
 
 # Clusters all the way and returns an ordonated list
@@ -227,7 +233,7 @@ def order_clustering(G, k):
                 if C1[0]!=0 or C2[0]!=0:
                     print('WARNING: Same age but not equal to 0')
                 elif G.nodes(data=True)[C1[1]]['token']['token_id'] == G.nodes(data=True)[C2[1]]['token']['token_id']:
-                    print('WARNING: Same age (0) and same token were merged\nToken:', G.nodes(data=True)[C1[1]]['token'])
+                    print('WARNING: Same age (0) and same token were merged', G.nodes(data=True)[C1[1]]['token'])
                     cluster[n + t] = [t+1] + C1[1:] + C2[1:]
                 else:
                     cluster[n + t] = [t+1] + C1[1:] + C2[1:]
