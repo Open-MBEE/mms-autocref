@@ -6,6 +6,7 @@ import uuid
 from req_analysis.sparql import INSERT_BLOCKS, INSERT_QUERY
 from req_analysis.libs.metrics import fuzzy_match_score, remove_stopwords_from_string
 from req_analysis.libs.neptune_wrapper import node_distance, get_node_neighbors
+from req_analysis.libs.spacy_tokenizer import create_custom_tokenizer
 
 import scipy
 import scipy.spatial.distance as ssd
@@ -15,6 +16,7 @@ import time
 
 import en_core_web_sm
 nlp_np = en_core_web_sm.load()
+nlp_np.tokenizer = create_custom_tokenizer(nlp_np)
 merge_nps = nlp_np.create_pipe("merge_noun_chunks")
 nlp_np.add_pipe(merge_nps)
 
