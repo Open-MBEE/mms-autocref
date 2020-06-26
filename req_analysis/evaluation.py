@@ -4,7 +4,7 @@ import numpy as np
 import uuid
 
 from req_analysis.sparql import INSERT_BLOCKS, INSERT_QUERY
-from req_analysis.libs.metrics import fuzzy_match_score
+from req_analysis.libs.metrics import fuzzy_match_score, remove_stopwords_from_string
 from req_analysis.libs.neptune_wrapper import node_distance, get_node_neighbors
 
 import scipy
@@ -55,11 +55,11 @@ class Evaluation():
         nx.draw_circular(self.matches_subgraph, with_labels=True)
 
 
-    def evaluate(self, neptune_graph, pprint=False):
+    def evaluate(self, neptune_graph, remove_stopwords=False, pprint=False):
         '''Runs a whole evaluation, from match_tokens() to allocation_discovery()'''
         
         time1 = time.time()
-        matches, count = self.match_tokens(0.0035)
+        matches, count = self.match_tokens(0.0035, remove_stopwords=remove_stopwords)
 
         if pprint:
             print(matches, '\n___________')
@@ -93,7 +93,7 @@ class Evaluation():
 
 
 
-    def match_tokens(self, match_threshold, pos_list=["NOUN", "PROPN"]):
+    def match_tokens(self, match_threshold, remove_stopwords=False, pos_list=["NOUN", "PROPN"]):
         '''Returns a list of matches between the tokens in the text and the list of model_elements
         Will match on the 'name' attribute of the model_elements dictionnaries'''
 
@@ -105,10 +105,14 @@ class Evaluation():
             if token['pos'] in pos_list:
 
                 found_match = None
+                if remove_stopwords:
+                    token_compare = remove_stopwords_from_string(token['text'])
+                else:
+                    token_compare = token['text']
 
                 for element in self.model_elements:
                     count+=1
-                    fuzzy_score = fuzzy_match_score(token['text'],  element['name'])
+                    fuzzy_score = fuzzy_match_score(token_compare, element['name'])
 
                     if fuzzy_score < match_threshold:
 

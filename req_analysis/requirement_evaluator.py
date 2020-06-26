@@ -52,7 +52,7 @@ class RequirementEvaluator():
         return req_evaluation
 
 
-    def evaluate_req_by_id(self, neptune_graph, requirement_id, reference_targets, pprint=False):
+    def evaluate_req_by_id(self, neptune_graph, requirement_id, reference_targets, remove_stopwords=False, pprint=False):
         '''Runs an Evaluation flow on a requirement, matched against reference_targets
         pprint=True will output the analysis real time'''
 
@@ -61,7 +61,7 @@ class RequirementEvaluator():
 
         req_evaluation = Evaluation(requirement_dict["instance"]["value"], requirement_dict["valueString"]["value"], reference_targets, self.sparql_wrapper)
         
-        req_evaluation.evaluate(neptune_graph, pprint)
+        req_evaluation.evaluate(neptune_graph, remove_stopwords=remove_stopwords, pprint=pprint)
 
         return req_evaluation
 
