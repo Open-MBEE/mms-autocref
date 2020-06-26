@@ -65,7 +65,7 @@ class RequirementEvaluator():
 
         return req_evaluation
 
-    def evaluate_all_requirements(self, neptune_graph, reference_targets, pprint=False):
+    def evaluate_all_requirements(self, neptune_graph, reference_targets, max_evals=0, pprint=False):
         '''Runs an Evalution flow for all requirements in the requirement_evaluator
         THIS WILL TAKE A (VERY) LONG TIME'''
 
@@ -84,5 +84,8 @@ class RequirementEvaluator():
                 print(c, '/', max_evals, '---', time.time()-time2, 's\nNO MATCH FOUND evaluation with req: ', req_id)
             except:
                 print(c, '/', max_evals, '---', time.time()-time2, 's\nFAILED evaluation with req: ', req_id)
+            
+            if c==max_evals: 
+                break
 
 
