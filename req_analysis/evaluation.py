@@ -165,10 +165,12 @@ class Evaluation():
         max_k = self.matches_subgraph.number_of_nodes()
         winners=dict()
 
-        try:
-            cluster = order_clustering(self.matches_subgraph, max_k)
-        except:
-            cluster = []
+        # if there is 0 or 1 match, no disambiguation needed and we can return the unique match (or none)
+        if max_k==0 or max_k==1:
+            self.winners = {match['token']['token_id']: match for match in self.transclusion_relations}
+            return self.winners
+
+        cluster = order_clustering(self.matches_subgraph, max_k)
 
         for el_i in cluster:
             token_i_id = self.matches_subgraph.nodes(data=True)[el_i]['token']['token_id']
