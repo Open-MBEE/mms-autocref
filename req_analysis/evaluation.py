@@ -28,6 +28,7 @@ class Evaluation():
         self.model_elements = reference_targets.table
         self.uri = uri
         self.mms_id = uri.replace('https://opencae.jpl.nasa.gov/mms/rdf/element/', '')
+        self.evaluation_uuid = uuid.uuid4().hex
         self.text = text
         self.tokens = []
         self.transclusion_relations = []
@@ -232,6 +233,7 @@ class Evaluation():
         for winner in self.winners.values():
             insert_concat += INSERT_BLOCKS.format(input_uri = self.uri,
                                         input_text = self.text.replace('"', r'\"'),
+                                        evaluation_uuid = self.evaluation_uuid,
                                         reference_uuid = uuid.uuid4().hex,
                                         match_uri = winner['model_element']['uri'],
                                         token_position = winner['token']['token_id'],

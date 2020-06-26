@@ -88,14 +88,16 @@ select * from mms-graph:data.tmt {
 
 
 INSERT_BLOCKS = """
-<{input_uri}> mms-autocref:reference mms-autocref-i:Reference.{reference_uuid} ;
-  .
+mms-autocref-i:Evaluation.{evaluation_uuid} a mms-autocref:Evaluation ;
+    mms-autocref:evaluates <{input_uri}> ;
+    mms-autocref:inputText \"\"\"{input_text}\"\"\"; 
+    mms-autocref:reference mms-autocref-i:Reference.{reference_uuid} ;
+    .
 
 mms-autocref-i:Reference.{reference_uuid}
   a mms-autocref:Reference ;
-  mms-autocref:inputText \"\"\"{input_text}\"\"\" ;
-  mms-autocref:match <{match_uri}> ;
   mms-autocref:token mms-autocref-i:Token.{reference_uuid} ;
+  mms-autocref:match <{match_uri}> ;
   .
 
 mms-autocref-i:Token.{reference_uuid}
@@ -114,4 +116,5 @@ insert data {{
   graph <https://opencae.jpl.nasa.gov/mms/rdf/graph/autocref.tmt.test> {{
     {insert_blocks}
   }}
-}}"""
+}}
+"""
