@@ -1,7 +1,7 @@
 from SPARQLWrapper import JSON, POST
 from req_analysis.sparql import QUERY_ELEMENTS
 
-class ReferenceTarget():
+class ReferenceTargets():
 
     def __init__(self, sparql_wrapper):
         self.sparql_wrapper = sparql_wrapper
