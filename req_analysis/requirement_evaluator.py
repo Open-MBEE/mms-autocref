@@ -69,7 +69,7 @@ class RequirementEvaluator():
         '''Runs an Evalution flow for all requirements in the requirement_evaluator
         THIS WILL TAKE A (VERY) LONG TIME'''
 
-        c, max_evals = 0, len(self.requirements.keys())
+        c, req_total = 0, len(self.requirements.keys())
         time2 = time.time()
         for req_id in self.requirements.keys():
             c += 1
@@ -79,11 +79,11 @@ class RequirementEvaluator():
                                                 reference_targets,
                                                 pprint=pprint)
                 req_evaluation.insert_references()
-                print(c, '/', max_evals, '---', time.time()-time2, 's\nEVALUATION done for req: ', req_id)
+                print(c, '/', req_total, '---', time.time()-time2, 's\nEVALUATION done for req: ', req_id)
             except ValueError:
-                print(c, '/', max_evals, '---', time.time()-time2, 's\nNO MATCH FOUND evaluation with req: ', req_id)
+                print(c, '/', req_total, '---', time.time()-time2, 's\nNO MATCH FOUND evaluation with req: ', req_id)
             except:
-                print(c, '/', max_evals, '---', time.time()-time2, 's\nFAILED evaluation with req: ', req_id)
+                print(c, '/', req_total, '---', time.time()-time2, 's\nFAILED evaluation with req: ', req_id)
             
             if c==max_evals: 
                 break
