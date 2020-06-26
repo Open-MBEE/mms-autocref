@@ -11,12 +11,12 @@ nlp = en_core_web_sm.load()
 spacy_stopwords = spacy.lang.en.stop_words.STOP_WORDS
 
 
-def fuzzy_match_score(req_token_text, model_element_name):
+def fuzzy_match_score(str_1, str_2):
     '''Takes in 2 strings and return a fuzzy matching score'''
 
-    fuzzy = 1 - (fuzz.ratio(req_token_text, model_element_name) / 100. )
-    # jaccard = jaccard_distance(set(req_token_text.lower()), set(model_element_name.lower()))
-    cosine = cosine_distance(vector_encode_letters(req_token_text), vector_encode_letters(model_element_name)) # This is 10 times slower than the other
+    fuzzy = 1 - (fuzz.ratio(str_1, str_2) / 100. )
+    # jaccard = jaccard_distance(set(str_1.lower()), set(str_2.lower()))
+    cosine = cosine_distance(vector_encode_letters(str_1), vector_encode_letters(str_2)) # This is 10 times slower than the other
 
     return fuzzy*cosine
 
