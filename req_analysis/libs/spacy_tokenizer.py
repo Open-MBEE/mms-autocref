@@ -12,8 +12,6 @@ def create_custom_tokenizer(nlp):
     
     infixes = tuple([r"\<[\w\/]*\>"]) +  nlp.Defaults.infixes
     infix_re = spacy.util.compile_infix_regex(infixes)
-    prefix_re = compile_prefix_regex()
-    suffix_re = compile_suffix_regex()
 
     prefixes = list(nlp.Defaults.prefixes)
     prefixes.remove('<')
