@@ -90,7 +90,8 @@ select * from mms-graph:data.tmt {
 INSERT_BLOCKS = """
 mms-autocref-i:Evaluation.{evaluation_uuid} a mms-autocref:Evaluation ;
     mms-autocref:evaluates <{input_uri}> ;
-    mms-autocref:inputText \"\"\"{input_text}\"\"\"; 
+    mms-autocref:inputText \"\"\"{input_text}\"\"\" ;
+    mms-autocref:outputText \"\"\"{output_text}\"\"\" ;
     mms-autocref:reference mms-autocref-i:Reference.{reference_uuid} ;
     .
 

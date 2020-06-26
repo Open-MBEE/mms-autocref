@@ -233,6 +233,7 @@ class Evaluation():
         for winner in self.winners.values():
             insert_concat += INSERT_BLOCKS.format(input_uri = self.uri,
                                         input_text = self.text.replace('"', r'\"'),
+                                        output_text = self.cref_text.replace('"', r'\"'),
                                         evaluation_uuid = self.evaluation_uuid,
                                         reference_uuid = uuid.uuid4().hex,
                                         match_uri = winner['model_element']['uri'],
