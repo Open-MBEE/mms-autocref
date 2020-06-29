@@ -2,6 +2,7 @@ import spacy
 import networkx as nx
 import numpy as np
 import uuid
+import pprint as pp
 
 from req_analysis.sparql import INSERT_BLOCKS, INSERT_QUERY
 from req_analysis.libs.metrics import fuzzy_match_score, remove_stopwords_from_string
@@ -65,7 +66,7 @@ class Evaluation():
         matches, count = self.match_tokens(0.0035, remove_stopwords=remove_stopwords)
 
         if pprint:
-            print(matches, '\n___________')
+            print(pp.pprint(matches), '\n___________')
             print(count, 'comparaisons')
             print('Time: ', time.time()-time1)
 
