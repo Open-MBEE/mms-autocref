@@ -1,5 +1,7 @@
 # mms-autocref
 Auto-crossreferencing for MMS.
+This work was presented at the MODELS conference (ACM/IEEE 23rd International Conference on Model Driven Engineering Languages and Systems).\
+The recording of the presentation can be seen [here](https://youtu.be/1lBe9AcYfSA?list=LL&t=2484). The paper can be found in the `presentations` folder.
 
 
 ## Try it out in Binder
